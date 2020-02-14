@@ -8,19 +8,23 @@ import org.springframework.web.server.ResponseStatusException
 class MockServerManagerTest {
     @Test
     fun testDefaultServer() {
-        MockServerManager.setDefaultResponse("/", "ok")
+        var user = TestUser("test", "run", 18)
+        MockServerManager.setDefaultJsonResponse("/", user)
 
         val client: WebClient = WebClient.create(MockServerManager.getUrl())
         val result = client.get()
-            .uri { it.path("/").build()}
+            .uri { it.path("/").build() }
             .retrieve()
-            .onStatus({ status -> !status.is2xxSuccessful}) {
+            .onStatus({ status -> !status.is2xxSuccessful }) {
                 val status = it.statusCode()
                 it.bodyToMono(String::class.java)
                     .map { ResponseStatusException(status, it) }
             }
-            .bodyToMono(String::class.java)
+            .bodyToMono(TestUser::class.java)
 
-        Assertions.assertEquals(result.block(), "ok")
+
+        val user2 = result.block()!!
+
+        Assertions.assertEquals(user.name, user2.name)
     }
 }

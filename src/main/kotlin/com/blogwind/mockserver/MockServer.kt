@@ -7,6 +7,8 @@ import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
 import java.util.*
 
+data class TestUser(var name: String?, var email: String?, var age: Int?)
+
 class MockServer {
     var server: MockWebServer = MockWebServer()
     private var isRunning: Boolean = true
