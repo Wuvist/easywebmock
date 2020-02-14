@@ -30,6 +30,10 @@ class MockServerManager {
             return defaultServer.setDefaultResponse(toPath, withHandler)
         }
 
+        fun setDefaultJsonResponse(toPath: String, withObject: Any): MockServer {
+            return defaultServer.setDefaultJsonResponse(toPath, withObject)
+        }
+
         fun setOneTimeResponse(toPath: String, withResponse: MockResponse): MockServer {
             return defaultServer.setOneTimeResponse(toPath, withResponse)
         }

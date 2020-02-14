@@ -19,10 +19,13 @@ class MockServer {
         return this
     }
 
-    fun setDefaultResponse(toPath: String, withString: String): MockServer {
-        defaultResponses[toPath] = MockResponse().setResponseCode(200)
-            .addHeader("Content-Type", "text/plain")
-            .setBody(withString)
+    fun setDefaultResponse(toPath: String, withString: String, contentType: String = "text/plain"): MockServer {
+        setDefaultResponse(toPath, getStringResp(withString, contentType))
+        return this
+    }
+
+    fun setDefaultJsonResponse(toPath: String, withObject: Any): MockServer {
+        setDefaultResponse(toPath, getJsonResp(withObject))
         return this
     }
 
@@ -41,10 +44,8 @@ class MockServer {
         return this
     }
 
-    fun setOneTimeResponse(toPath: String, withString: String): MockServer {
-        setOneTimeResponse(toPath, MockResponse().setResponseCode(200)
-            .addHeader("Content-Type", "text/plain")
-            .setBody(withString))
+    fun setOneTimeResponse(toPath: String, withString: String, contentType: String = "text/plain"): MockServer {
+        setOneTimeResponse(toPath, getStringResp(withString, contentType))
         return this
     }
 
@@ -110,5 +111,11 @@ class MockServer {
         return MockResponse().setResponseCode(200)
             .addHeader("Content-Type", "application/json")
             .setBody(objectMapper.writeValueAsString(obj))
+    }
+
+    private fun getStringResp(resp: String, contentType: String = "text/plain"): MockResponse {
+        return MockResponse().setResponseCode(200)
+            .addHeader("Content-Type", contentType)
+            .setBody(resp)
     }
 }
