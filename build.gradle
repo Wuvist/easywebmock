@@ -13,6 +13,7 @@ repositories {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation 'org.springframework.boot:spring-boot-starter-webflux:2.2.4.RELEASE'
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.10.2'
     implementation "com.squareup.okhttp3:mockwebserver:3.2.0"
     testImplementation "org.junit.jupiter:junit-jupiter:5.6.0"
 }
@@ -21,9 +22,21 @@ test {
     useJUnitPlatform()
 }
 
-compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+jacoco {
+    toolVersion = "0.8.5"
 }
+
+sourceCompatibility = 1.8
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs = ["-Xjsr305=strict"]
+    }
+}
+
 compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs = ["-Xjsr305=strict"]
+    }
 }
