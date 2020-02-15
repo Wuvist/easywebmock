@@ -6,7 +6,7 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.RecordedRequest
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import java.net.URL
+import java.io.IOException
 
 class MockServerManagerTest {
     @Test
@@ -39,5 +39,56 @@ class MockServerManagerTest {
         val user2: TestUser = client.postObject("/user", user)
 
         Assertions.assertEquals(user2.age, 36)
+    }
+
+    @Test
+    fun testOneTime() {
+        MockServerManager.newServer("test")
+        val server = MockServerManager.getServer("test")!!
+        val client = UrlClient(server.getUrl())
+
+        server.setDefaultResponse("/ping", "ok")
+        server.setOneTimeResponse("/ping", "pong")
+        server.setOneTimeResponse("/ping", "pong")
+
+        Assertions.assertEquals(client.get("/ping"), "pong")
+        Assertions.assertEquals(client.get("/ping"), "pong")
+        Assertions.assertEquals(client.get("/ping"), "ok")
+    }
+
+    @Test
+    fun testOneTimeJson() {
+        var user = TestUser("test", "run", 18)
+        var user2 = TestUser("test", "run", 19)
+        val toPath = "/test_user"
+        val client = UrlClient(MockServerManager.getUrl())
+
+        MockServerManager.setDefaultJsonResponse(toPath, user)
+        MockServerManager.setOneTimeJsonResponse(toPath, user2)
+
+        Assertions.assertEquals(client.getObject<TestUser>(toPath).age, user2.age)
+        Assertions.assertEquals(client.getObject<TestUser>(toPath).age, user.age)
+    }
+
+    @Test
+    fun testIsRunning() {
+        val client = UrlClient(MockServerManager.getUrl())
+        val toPath = "/status"
+        MockServerManager.setRunning(false)
+
+        MockServerManager.setDefaultResponse(toPath, "up")
+        MockServerManager.setOneTimeResponse(toPath, "ok")
+        var flag = false
+        try {
+            client.get(toPath)
+        } catch (e: IOException) {
+            flag = true
+        }
+
+        Assertions.assertTrue(flag)
+
+        MockServerManager.setRunning(true)
+        Assertions.assertEquals(client.get(toPath), "ok")
+        Assertions.assertEquals(client.get(toPath), "up")
     }
 }
