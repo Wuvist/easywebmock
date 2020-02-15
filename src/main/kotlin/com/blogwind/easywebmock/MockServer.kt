@@ -21,18 +21,18 @@ class MockServer {
         return this
     }
 
+    fun setDefaultResponse(toPath: String, withHandler: (RecordedRequest) -> MockResponse): MockServer {
+        defaultHandlers[toPath] = withHandler
+        return this
+    }
+
     fun setDefaultResponse(toPath: String, withString: String, contentType: String = "text/plain"): MockServer {
         setDefaultResponse(toPath, getStringResp(withString, contentType))
         return this
     }
 
-    fun setDefaultJsonResponse(toPath: String, withObject: Any): MockServer {
+    fun setDefaultResponseJson(toPath: String, withObject: Any): MockServer {
         setDefaultResponse(toPath, getJsonResp(withObject))
-        return this
-    }
-
-    fun setDefaultResponse(toPath: String, withHandler: (RecordedRequest) -> MockResponse): MockServer {
-        defaultHandlers[toPath] = withHandler
         return this
     }
 
@@ -51,7 +51,7 @@ class MockServer {
         return this
     }
 
-    fun setOneTimeJsonResponse(toPath: String, withObject: Any): MockServer {
+    fun setOneTimeResponseJson(toPath: String, withObject: Any): MockServer {
         setOneTimeResponse(toPath, getJsonResp(withObject))
         return this
     }
@@ -108,7 +108,7 @@ class MockServer {
                 }
 
                 return MockResponse().setResponseCode(404)
-                    .addHeader("Content-Type", "application/json")
+                    .addHeader("Content-Type", "text/plain")
                     .setBody("Not Found")
             }
         }

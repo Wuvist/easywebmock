@@ -9,7 +9,6 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import java.net.URL
 
-
 class UrlClient(baseUrl: String) {
     private val baseUrl = baseUrl.trimEnd('/')
 
@@ -17,7 +16,7 @@ class UrlClient(baseUrl: String) {
         return URL(baseUrl + path).readText()
     }
 
-    inline fun <reified T> getObject(path: String) :T {
+    inline fun <reified T> getObject(path: String): T {
         return jacksonObjectMapper().readValue(get(path))
     }
 
@@ -34,13 +33,13 @@ class UrlClient(baseUrl: String) {
         return response.body()!!.string()
     }
 
-    inline fun <reified T> postObject(path: String, obj: Any) :T {
+    inline fun <reified T> postObject(path: String, obj: Any): T {
         val objectMapper = ObjectMapper()
-        val content =objectMapper.writeValueAsString(obj)
-        return postObject<T>(path, content)
+        val content = objectMapper.writeValueAsString(obj)
+        return postObject(path, content)
     }
 
-    inline fun <reified T> postObject(path: String, content: String = "") :T {
+    inline fun <reified T> postObject(path: String, content: String = ""): T {
         return jacksonObjectMapper().readValue(post(path, content))
     }
 }

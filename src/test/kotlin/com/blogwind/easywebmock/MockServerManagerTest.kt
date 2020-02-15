@@ -12,7 +12,7 @@ class MockServerManagerTest {
     @Test
     fun testDefaultServer() {
         var user = TestUser("test", "run", 18)
-        MockServerManager.setDefaultJsonResponse("/", user)
+        MockServerManager.setDefaultResponseJson("/", user)
 
         val client = UrlClient(MockServerManager.getUrl())
 
@@ -86,8 +86,8 @@ class MockServerManagerTest {
         val toPath = "/test_user"
         val client = UrlClient(MockServerManager.getUrl())
 
-        MockServerManager.setDefaultJsonResponse(toPath, user)
-        MockServerManager.setOneTimeJsonResponse(toPath, user2)
+        MockServerManager.setDefaultResponseJson(toPath, user)
+        MockServerManager.setOneTimeResponseJson(toPath, user2)
 
         Assertions.assertEquals(client.getObject<TestUser>(toPath).age, user2.age)
         Assertions.assertEquals(client.getObject<TestUser>(toPath).age, user.age)
