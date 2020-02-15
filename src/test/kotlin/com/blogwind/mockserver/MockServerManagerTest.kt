@@ -156,5 +156,6 @@ class MockServerManagerTest {
         val server = MockServerManager()
 
         Assertions.assertNotNull(server)
+        Assertions.assertNotNull(MockServerManager.defaultServer.server)
     }
 }

@@ -10,7 +10,7 @@ import java.util.*
 data class TestUser(val name: String?, val email: String?, var age: Int?)
 
 class MockServer {
-    var server: MockWebServer = MockWebServer()
+    val server: MockWebServer = MockWebServer()
     private var isRunning: Boolean = true
     private var oneTimeResponses = mutableMapOf<String, Stack<MockResponse>>()
     private var defaultResponses = mutableMapOf<String, MockResponse>()
