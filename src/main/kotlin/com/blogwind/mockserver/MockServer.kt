@@ -123,7 +123,7 @@ class MockServer {
             .setBody(objectMapper.writeValueAsString(obj))
     }
 
-    private fun getStringResp(resp: String, contentType: String = "text/plain"): MockResponse {
+    private fun getStringResp(resp: String, contentType: String): MockResponse {
         return MockResponse().setResponseCode(200)
             .addHeader("Content-Type", contentType)
             .setBody(resp)

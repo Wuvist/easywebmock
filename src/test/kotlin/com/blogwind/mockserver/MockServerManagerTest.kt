@@ -111,6 +111,24 @@ class MockServerManagerTest {
     }
 
     @Test
+    fun testHTML() {
+        val server = MockServerManager.defaultServer
+        val client = UrlClient(server.getUrl())
+        val toPath = "/html"
+
+        var flag = false
+        try {
+            client.get(toPath)
+        } catch (e: IOException) {
+            flag = true
+        }
+        Assertions.assertTrue(flag)
+
+        server.setDefaultResponse(toPath, "<html></html>", "text/html")
+        Assertions.assertEquals(client.get(toPath), "<html></html>")
+    }
+
+    @Test
     fun testMisc() {
         val server = MockServerManager()
 
