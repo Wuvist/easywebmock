@@ -1,4 +1,4 @@
-package com.blogwind.mockserver
+package com.blogwind.easywebmock
 
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.RecordedRequest
