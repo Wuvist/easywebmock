@@ -96,7 +96,15 @@ class MockServer {
 
                 val handler = defaultHandlers[request.path]
                 if (handler != null) {
-                    return handler(request)
+                    return try {
+                        handler(request)
+                    } catch (e: Exception) {
+                        println("Handler Error :\n$e")
+
+                        MockResponse().setResponseCode(500)
+                            .addHeader("Content-Type", "text/plain")
+                            .setBody("Handler Error :\n$e")
+                    }
                 }
 
                 return MockResponse().setResponseCode(404)
