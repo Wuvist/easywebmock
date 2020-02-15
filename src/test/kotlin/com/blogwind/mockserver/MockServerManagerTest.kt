@@ -24,15 +24,15 @@ class MockServerManagerTest {
     @Test
     fun testHandler() {
         var user = TestUser("test", "run", 18)
-        MockServerManager.setDefaultResponse("/user", fun(request : RecordedRequest) : MockResponse {
+        MockServerManager.setDefaultResponse("/user", fun(request: RecordedRequest): MockResponse {
             val input = request.body.readUtf8()
             var mapper = jacksonObjectMapper()
-            var user: TestUser = mapper.readValue(input)
-            user.age = (user.age?: 0) * 2
+            var resp: TestUser = mapper.readValue(input)
+            resp.age = (resp.age ?: 0) * 2
 
             return MockResponse().setResponseCode(200)
                 .addHeader("Content-Type", "application/json")
-                .setBody(mapper.writeValueAsString(user))
+                .setBody(mapper.writeValueAsString(resp))
         })
 
         val client = UrlClient(MockServerManager.getUrl())
