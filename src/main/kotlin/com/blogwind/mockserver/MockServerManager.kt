@@ -5,7 +5,7 @@ import okhttp3.mockwebserver.RecordedRequest
 
 class MockServerManager {
     companion object {
-        var defaultServer: MockServer = MockServer()
+        val defaultServer: MockServer = MockServer()
         private var servers = mutableMapOf<String, MockServer>()
 
         fun newServer(name: String): MockServer {

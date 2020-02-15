@@ -91,4 +91,29 @@ class MockServerManagerTest {
         Assertions.assertEquals(client.get(toPath), "ok")
         Assertions.assertEquals(client.get(toPath), "up")
     }
+
+    @Test
+    fun testResponse() {
+        val client = UrlClient(MockServerManager.getUrl())
+        val toPath = "/resp"
+
+        MockServerManager.setDefaultResponse(
+            toPath, MockResponse().setResponseCode(200)
+                .setBody("ping")
+        )
+        MockServerManager.setOneTimeResponse(
+            toPath, MockResponse().setResponseCode(200)
+                .setBody("pong")
+        )
+
+        Assertions.assertEquals(client.get(toPath), "pong")
+        Assertions.assertEquals(client.get(toPath), "ping")
+    }
+
+    @Test
+    fun testMisc() {
+        val server = MockServerManager()
+
+        Assertions.assertNotNull(server)
+    }
 }
