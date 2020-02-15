@@ -42,6 +42,29 @@ class MockServerManagerTest {
     }
 
     @Test
+    fun testHandlerError() {
+        val path = "/error"
+        MockServerManager.setDefaultResponse(path, fun(request: RecordedRequest): MockResponse {
+            val input = request.body.readUtf8()
+            var mapper = jacksonObjectMapper()
+            var resp: TestUser = mapper.readValue(input)
+
+            return MockResponse().setResponseCode(200)
+                .setBody(mapper.writeValueAsString(resp))
+        })
+
+        val client = UrlClient(MockServerManager.getUrl())
+
+        var flag = false
+        try {
+            client.getObject<TestUser>(path)
+        } catch (e: IOException) {
+            flag = true
+        }
+        Assertions.assertTrue(flag)
+    }
+
+    @Test
     fun testOneTime() {
         MockServerManager.newServer("test")
         val server = MockServerManager.getServer("test")!!
