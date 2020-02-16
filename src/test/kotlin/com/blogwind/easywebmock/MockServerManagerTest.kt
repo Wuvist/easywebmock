@@ -16,7 +16,7 @@ class MockServerManagerTest {
 
         val client = UrlClient(MockServerManager.getUrl())
 
-        val user2: TestUser = client.getObject("/")
+        val user2: TestUser = client.getForObject("/")
 
         Assertions.assertEquals(user.name, user2.name)
     }
@@ -36,7 +36,7 @@ class MockServerManagerTest {
         })
 
         val client = UrlClient(MockServerManager.getUrl())
-        val user2: TestUser = client.postObject("/user", user)
+        val user2: TestUser = client.postForObject("/user", user)
 
         Assertions.assertEquals(user2.age, 36)
     }
@@ -57,7 +57,7 @@ class MockServerManagerTest {
 
         var flag = false
         try {
-            client.getObject<TestUser>(path)
+            client.getForObject<TestUser>(path)
         } catch (e: IOException) {
             flag = true
         }
@@ -89,8 +89,8 @@ class MockServerManagerTest {
         MockServerManager.setDefaultResponseJson(toPath, user)
         MockServerManager.setOneTimeResponseJson(toPath, user2)
 
-        Assertions.assertEquals(client.getObject<TestUser>(toPath).age, user2.age)
-        Assertions.assertEquals(client.getObject<TestUser>(toPath).age, user.age)
+        Assertions.assertEquals(client.getForObject<TestUser>(toPath).age, user2.age)
+        Assertions.assertEquals(client.getForObject<TestUser>(toPath).age, user.age)
     }
 
     @Test

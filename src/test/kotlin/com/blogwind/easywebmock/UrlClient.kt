@@ -16,7 +16,7 @@ class UrlClient(baseUrl: String) {
         return URL(baseUrl + path).readText()
     }
 
-    inline fun <reified T> getObject(path: String): T {
+    inline fun <reified T> getForObject(path: String): T {
         return jacksonObjectMapper().readValue(get(path))
     }
 
@@ -33,13 +33,13 @@ class UrlClient(baseUrl: String) {
         return response.body()!!.string()
     }
 
-    inline fun <reified T> postObject(path: String, obj: Any): T {
+    inline fun <reified T> postForObject(path: String, obj: Any): T {
         val objectMapper = ObjectMapper()
         val content = objectMapper.writeValueAsString(obj)
-        return postObject(path, content)
+        return postForObject(path, content)
     }
 
-    inline fun <reified T> postObject(path: String, content: String = ""): T {
+    inline fun <reified T> postForObject(path: String, content: String = ""): T {
         return jacksonObjectMapper().readValue(post(path, content))
     }
 }
