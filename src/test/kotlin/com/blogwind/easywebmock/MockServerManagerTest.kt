@@ -152,6 +152,16 @@ class MockServerManagerTest {
     }
 
     @Test
+    fun testPath() {
+        val server = MockServerManager.defaultServer
+        val client = UrlClient(server.getUrl())
+        val toPath = "/foobar"
+
+        server.setOneTimeResponse(toPath, "foobar")
+        Assertions.assertEquals(client.get("$toPath?user=1"), "foobar")
+    }
+
+    @Test
     fun testMisc() {
         val server = MockServerManager()
 

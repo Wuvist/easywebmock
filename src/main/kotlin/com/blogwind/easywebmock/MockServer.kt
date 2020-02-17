@@ -84,17 +84,18 @@ class MockServer {
                         .setBody("Internal error")
                 }
 
-                var resp = getResponseOnce(request.path)
+                val path = request.requestUrl!!.encodedPath
+                var resp = getResponseOnce(path)
                 if (resp != null) {
                     return resp
                 }
 
-                resp = defaultResponses[request.path]
+                resp = defaultResponses[path]
                 if (resp != null) {
                     return resp
                 }
 
-                val handler = defaultHandlers[request.path]
+                val handler = defaultHandlers[path]
                 if (handler != null) {
                     return try {
                         handler(request)
@@ -112,7 +113,7 @@ class MockServer {
                     .setBody("Not Found")
             }
         }
-        server.setDispatcher(dispatcher)
+        server.dispatcher = dispatcher
         server.start()
     }
 

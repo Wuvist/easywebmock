@@ -3,10 +3,11 @@ package com.blogwind.easywebmock
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.net.URL
 
 class UrlClient(baseUrl: String) {
@@ -22,15 +23,15 @@ class UrlClient(baseUrl: String) {
 
     fun post(path: String, content: String = ""): String {
         val client = OkHttpClient()
-        val contentType = MediaType.parse("application/json; charset=utf-8")
-        val body = RequestBody.create(contentType, content)
+        val contentType = "application/json; charset=utf-8".toMediaType()
+        val body = content.toRequestBody(contentType)
 
         val request: Request = Request.Builder()
             .url(baseUrl + path)
             .post(body).build()
 
         val response = client.newCall(request).execute()
-        return response.body()!!.string()
+        return response.body!!.string()
     }
 
     inline fun <reified T> postForObject(path: String, obj: Any): T {
