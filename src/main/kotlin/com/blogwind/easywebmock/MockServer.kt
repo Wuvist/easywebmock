@@ -26,7 +26,7 @@ class MockServer {
         return this
     }
 
-    fun setDefaultResponse(toPath: String, withString: String, contentType: String = "text/plain"): MockServer {
+    fun setDefaultResponse(toPath: String, withString: String, contentType: String = ""): MockServer {
         setDefaultResponse(toPath, getStringResp(withString, contentType))
         return this
     }
@@ -46,7 +46,7 @@ class MockServer {
         return this
     }
 
-    fun setOneTimeResponse(toPath: String, withString: String, contentType: String = "text/plain"): MockServer {
+    fun setOneTimeResponse(toPath: String, withString: String, contentType: String = ""): MockServer {
         setOneTimeResponse(toPath, getStringResp(withString, contentType))
         return this
     }
@@ -125,8 +125,20 @@ class MockServer {
     }
 
     private fun getStringResp(resp: String, contentType: String): MockResponse {
+        val respContentType = if (contentType == "") {
+            if ((resp.startsWith("{") && resp.endsWith("}")) || resp.startsWith("[") && resp.endsWith("]")) {
+                "application/json"
+            } else if (resp.startsWith("<") && resp.endsWith(">")) {
+                "text/html"
+            } else {
+                "text/plain"
+            }
+        } else {
+            contentType
+        }
+
         return MockResponse().setResponseCode(200)
-            .addHeader("Content-Type", contentType)
+            .addHeader("Content-Type", respContentType)
             .setBody(resp)
     }
 }

@@ -26,7 +26,7 @@ class MockServerManager {
             return defaultServer.setDefaultResponse(toPath, withHandler)
         }
 
-        fun setDefaultResponse(toPath: String, withString: String, contentType: String = "text/plain"): MockServer {
+        fun setDefaultResponse(toPath: String, withString: String, contentType: String = ""): MockServer {
             return defaultServer.setDefaultResponse(toPath, withString, contentType)
         }
 
@@ -38,8 +38,8 @@ class MockServerManager {
             return defaultServer.setOneTimeResponse(toPath, withResponse)
         }
 
-        fun setOneTimeResponse(toPath: String, withString: String): MockServer {
-            return defaultServer.setOneTimeResponse(toPath, withString)
+        fun setOneTimeResponse(toPath: String, withString: String, contentType: String = ""): MockServer {
+            return defaultServer.setOneTimeResponse(toPath, withString, contentType)
         }
 
         fun setOneTimeResponseJson(toPath: String, withObject: Any): MockServer {
