@@ -12,7 +12,7 @@ data class TestUser(val name: String?, val email: String?, var age: Int?)
 class MockServer {
     val server: MockWebServer = MockWebServer()
     private var isRunning: Boolean = true
-    private var oneTimeResponses = mutableMapOf<String, Stack<MockResponse>>()
+    private var oneTimeResponses = mutableMapOf<String, Queue<MockResponse>>()
     private var defaultResponses = mutableMapOf<String, MockResponse>()
     private var defaultHandlers = mutableMapOf<String, (RecordedRequest) -> MockResponse>()
 
@@ -37,12 +37,12 @@ class MockServer {
     }
 
     fun setOneTimeResponse(toPath: String, withResponse: MockResponse): MockServer {
-        var respStack = oneTimeResponses[toPath]
-        if (respStack == null) {
-            respStack = Stack()
-            oneTimeResponses[toPath] = respStack
+        var respQueue = oneTimeResponses[toPath]
+        if (respQueue == null) {
+            respQueue = LinkedList()
+            oneTimeResponses[toPath] = respQueue
         }
-        respStack.push(withResponse)
+        respQueue.add(withResponse)
         return this
     }
 
@@ -67,7 +67,7 @@ class MockServer {
     private fun getResponseOnce(forPath: String): MockResponse? {
         var respStack = oneTimeResponses[forPath] ?: return null
 
-        val resp = respStack.pop()
+        val resp = respStack.remove()
 
         if (respStack.isEmpty()) {
             oneTimeResponses.remove(forPath)

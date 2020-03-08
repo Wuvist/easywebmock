@@ -71,10 +71,10 @@ class MockServerManagerTest {
         val client = UrlClient(server.getUrl())
 
         server.setDefaultResponse("/ping", "ok")
-        server.setOneTimeResponse("/ping", "pong")
+        server.setOneTimeResponse("/ping", "ping")
         server.setOneTimeResponse("/ping", "pong")
 
-        Assertions.assertEquals(client.get("/ping"), "pong")
+        Assertions.assertEquals(client.get("/ping"), "ping")
         Assertions.assertEquals(client.get("/ping"), "pong")
         Assertions.assertEquals(client.get("/ping"), "ok")
     }
