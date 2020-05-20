@@ -40,7 +40,7 @@ object Build : BuildType({
 
     steps {
         gradle {
-            tasks = "build"
+            tasks = "clean build"
             buildFile = ""
         }
     }
