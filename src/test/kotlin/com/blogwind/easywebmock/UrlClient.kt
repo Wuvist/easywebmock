@@ -6,15 +6,14 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import java.net.URL
+import java.net.URI
 
 class UrlClient(baseUrl: String) {
     private val baseUrl = baseUrl.trimEnd('/')
 
     fun get(path: String): String {
-        return URL(baseUrl + path).readText()
+        return URI(baseUrl + path).toURL().readText()
     }
 
     inline fun <reified T> getForObject(path: String): T {
